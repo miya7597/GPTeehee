@@ -7,7 +7,6 @@ from typing import Annotated, Literal, Optional
 from genai_session.session import GenAISession
 from genai_session.utils.context import GenAIContext
 
-
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 
@@ -19,10 +18,10 @@ AGENT_JWT = os.getenv("AGENT_JWT");
 session = GenAISession(jwt_token=AGENT_JWT)
 
 @session.bind(
-    name="gpteehee",
+    name="explanation_agent",
     description="Agent that explains text at different complexities (e.g. kid, adult, expert)"
 )
-async def gpteehee(
+async def explanation_agent(
     agent_context: GenAIContext,
     text: Annotated[str, "Text you want explained"],
     complexity: Annotated[Optional[Literal["kid", "adult", "expert"]], "complexity"] = None

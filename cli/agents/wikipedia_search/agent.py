@@ -1,9 +1,10 @@
-import asyncio
 import os
+import asyncio
 import requests
 import logging
 from dotenv import load_dotenv
 from typing import Annotated
+
 from genai_session.session import GenAISession
 from genai_session.utils.context import GenAIContext
 
@@ -41,15 +42,7 @@ async def wikipedia_search(
         logging.error(f"Exception while querying Wikipedia: {e}")
         return "An error occurred while searching Wikipedia."
 
-async def main():
-    logging.info("Wikipedia Search Agent is running...")
-    try:
-        await session.process_events()
-    except KeyboardInterrupt:
-        logging.info("Interrupted. Shutting down agent...")
-    finally:
-        await session.close()
-
+# ✅ Correct single definition of main
 async def main():
     logging.info("Wikipedia Search Agent is running...")
     print("✅ Agent script loaded")
@@ -59,6 +52,6 @@ async def main():
         logging.info("Interrupted. Shutting down agent...")
     finally:
         await session.close()
-        
+
 if __name__ == "__main__":
     asyncio.run(main())
