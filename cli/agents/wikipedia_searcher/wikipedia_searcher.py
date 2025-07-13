@@ -1,28 +1,17 @@
-import os
 import asyncio
-import requests
-import logging
-from dotenv import load_dotenv
 from typing import Annotated
-
 from genai_session.session import GenAISession
 from genai_session.utils.context import GenAIContext
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-
-# Load environment variables
-load_dotenv()
-
-# Get the token from .env
-AGENT_JWT = os.getenv("AGENT_JWT")
+AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYWU2MmE5ZC00Y2E3LTRjZjctOGUyNC1jYzgyZTMyYTFlZDYiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6ImU2NjUyZWU5LTc3OGQtNGM3ZS1iMmUyLWY2OWQzYTUzZTI0NyJ9.PGbrQj1HWyi3acwJydGKn_UYjLPX0tb70v4xUXL87DU" # noqa: E501
 session = GenAISession(jwt_token=AGENT_JWT)
 
+
 @session.bind(
-    name="wikipedia_search",
-    description="Searches Wikipedia for a given query and returns the summary."
+    name="wikipedia_searcher",
+    description="agent that searches wikipedia"
 )
-async def wikipedia_search(
+async def wikipedia_searcher(
     agent_context: GenAIContext,
     query: Annotated[str, "The topic or term to search on Wikipedia"]
 ) -> str:
@@ -52,6 +41,11 @@ async def main():
         logging.info("Interrupted. Shutting down agent...")
     finally:
         await session.close()
+
+
+async def main():
+    print(f"Agent with token '{AGENT_JWT}' started")
+    await session.process_events()
 
 if __name__ == "__main__":
     asyncio.run(main())

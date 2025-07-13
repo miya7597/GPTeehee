@@ -1,28 +1,17 @@
 import asyncio
-import os
 from typing import Annotated
 from genai_session.session import GenAISession
 from genai_session.utils.context import GenAIContext
-from dotenv import load_dotenv
-from openai import AsyncOpenAI
 
-# Load .env if needed
-load_dotenv()
-
-AGENT_JWT = os.getenv("AGENT_JWT")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Make sure this is set
-
-# Create GenAI session
+AGENT_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZGIzZWI5NS04NzhlLTQwMDctODc0ZS1hZDgzNjZhNDJlMzAiLCJleHAiOjI1MzQwMjMwMDc5OSwidXNlcl9pZCI6ImU2NjUyZWU5LTc3OGQtNGM3ZS1iMmUyLWY2OWQzYTUzZTI0NyJ9.rlwqhJHWQSzYgoDyh3TfIAwwIO4Bwy5Aj5xpJb9jEFg" # noqa: E501
 session = GenAISession(jwt_token=AGENT_JWT)
 
-# OpenAI client
-openai = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 @session.bind(
-    name="summarize_text",
+    name="text_summarizer",
     description="Agent that summarizes a block of text.",
 )
-async def summarize_text(
+async def text_summarizer(
     agent_context: Annotated[GenAIContext, "Agent context object"],
     text: Annotated[str, "The text to summarize"]
 ) -> str:
@@ -45,8 +34,9 @@ async def summarize_text(
         agent_context.logger.error(f"Error during summarization: {e}")
         return "Sorry, I couldn't summarize that."
 
+
 async def main():
-    print(f"Summarizer agent with token '{AGENT_JWT}' started")
+    print(f"Agent with token '{AGENT_JWT}' started")
     await session.process_events()
 
 if __name__ == "__main__":
